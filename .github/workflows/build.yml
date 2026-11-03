@@ -1,0 +1,43 @@
+name: Build Upgrader HMOD
+
+on:
+workflow_dispatch:
+push:
+branches:
+- main
+
+permissions:
+contents: read
+
+jobs:
+build:
+runs-on: ubuntu-latest
+timeout-minutes: 30
+
+steps:
+  - name: Download source
+    uses: actions/checkout@v4
+
+  - name: Install Rust
+    uses: dtolnay/rust-toolchain@stable
+    with:
+      targets: wasm32-unknown-unknown
+
+  - name: Install Horizon mod builder
+    run: cargo install --git https://github.com/Vasysik/horizon-android --branch android cargo-horizon-mod
+
+  - name: Run tests
+    run: cargo test
+
+  - name: Build HMOD
+    run: cargo horizon-mod build
+
+  - name: Validate HMOD
+    run: cargo horizon-mod check target/horizon-mod/upgrader.hmod
+
+  - name: Upload HMOD
+    uses: actions/upload-artifact@v4
+    with:
+      name: upgrader-hmod
+      path: target/horizon-mod/*.hmod
+      if-no-files-found: error
