@@ -818,9 +818,8 @@ impl Mod for Upgrader {
             if let Some(pending) = self.pending.take() {
                 self.finish_attempt(pending);
 
-                if self.open {
+                self.open = true;
                     self.draw();
-                }
             }
         }
 
