@@ -1,4 +1,3 @@
-name: Build Upgrader HMOD
 
 'on':
 workflow_dispatch:
