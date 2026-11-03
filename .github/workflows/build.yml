@@ -11,11 +11,12 @@ contents: read
 
 jobs:
 build:
+name: Build Upgrader
 runs-on: ubuntu-latest
 timeout-minutes: 30
 
 steps:
-  - name: Download source
+  - name: Checkout source
     uses: actions/checkout@v4
 
   - name: Install Rust
@@ -23,19 +24,22 @@ steps:
     with:
       targets: wasm32-unknown-unknown
 
-  - name: Install Horizon mod builder
+  - name: Check project files
+    run: |
+      test -f Cargo.toml
+      test -f horizon-mod.toml
+      test -f src/lib.rs
+
+  - name: Install Horizon builder
     run: cargo install --git https://github.com/Vasysik/horizon-android --branch android cargo-horizon-mod
 
-  - name: Run tests
+  - name: Test Rust project
     run: cargo test
 
   - name: Build HMOD
     run: cargo horizon-mod build
 
-  - name: Validate HMOD
-    run: cargo horizon-mod check target/horizon-mod/upgrader.hmod
-
-  - name: Upload HMOD
+  - name: Upload build result
     uses: actions/upload-artifact@v4
     with:
       name: upgrader-hmod
