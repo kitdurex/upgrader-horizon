@@ -1,0 +1,19 @@
+[package]
+name = "upgrader-hmod"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "Upgrader menu and recipe-based odds for Horizon Android"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+horizon-mod-sdk = { git = "https://github.com/Vasysik/horizon-android", branch = "android" }
+
+[profile.release]
+lto = true
+opt-level = "s"
+codegen-units = 1
+panic = "abort"
