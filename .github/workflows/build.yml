@@ -1,7 +1,7 @@
 name: Build Upgrader HMOD
 
-on:
-workflow_dispatch: 
+"on":
+workflow_dispatch:
 push:
 branches:
 - main
@@ -33,13 +33,13 @@ steps:
   - name: Install Horizon builder
     run: cargo install --git https://github.com/Vasysik/horizon-android --branch android cargo-horizon-mod
 
-  - name: Test Rust project
+  - name: Run tests
     run: cargo test
 
   - name: Build HMOD
     run: cargo horizon-mod build
 
-  - name: Upload build result
+  - name: Upload HMOD
     uses: actions/upload-artifact@v4
     with:
       name: upgrader-hmod
